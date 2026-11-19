@@ -11,11 +11,24 @@ El tablero que resume las lecturas de los sensores falla con archivos grandes po
 ## 2. Situación inicial medible
 src/linea_base.py convierte cada línea en un diccionario y guarda todas en una lista.
 
+Comando: `python -m src.linea_base`
+
 | Medición preliminar (Clase 3) | Valor | Unidad |
 |---|---|---|
-| n utilizado | | registros |
-| Tiempo de ejecución (1 corrida) | | s |
-| Equipo y fecha | | — |
+| n utilizado | 300 000 (200 sensores) | registros |
+| Tiempo de ejecución (1 corrida) | 1.88 (inflado porque se midió con tracemalloc encendido) | s |
+| Pico de memoria (1 corrida) | 117.5 | MiB |
+| Memoria por registro (117.5 MiB × 1 048 576 B/MiB ÷ 300 000) | ≈ 411 | B/registro |
+| Equipo y fecha | PC del Integrante A: Windows 11, Intel 8 núcleos físicos / 12 lógicos, 15.63 GiB de RAM, Python 3.14.3 · 18/11/2026 | — |
+| Repetición (3 corridas, 18/11/2026 22:34, con cargador y navegador abierto) | tiempo: 1.70, 1.69 y 1.70 s · pico: 117.5 MiB en las 3 | s · MiB |
+
+**Impacto (estimación, no medido):** si la memoria crece en proporción a n (≈ 411 B por registro),
+2 GiB alcanzarían para unos 2 × 1 073 741 824 B ÷ 411 B ≈ **5.2 millones de registros**, y eso sin contar
+lo que usan el sistema operativo y el resto del tablero. Por eso, con archivos grandes el servidor de
+2 GiB se queda sin memoria. Esta estimación supone crecimiento lineal y se debe comprobar midiendo
+con varios n.
+
+> Es una sola corrida en un equipo distinto al servidor: sirve como punto de partida, no como resultado final.
 
 ## 3. Pregunta de investigación
 _¿Cómo cambia ________ (VD, unidad) cuando ________ (VI), manteniendo ________ (VC)?_
@@ -26,9 +39,9 @@ Ver [docs/hipotesis.md](docs/hipotesis.md).
 ## 5. Estrategias
 | Id | Estrategia | Idea principal | Efecto físico esperado | Responsable |
 |---|---|---|---|---|
-| A | Línea base | (situación inicial) | — | R2 |
-| B | | | | R3 |
-| C | | | | R3 |
+| A | Línea base | Carga todas las lecturas como diccionarios en una lista y luego agrupa las temperaturas por sensor | — (medido: 117.5 MiB con n = 300 000, ≈ 411 bytes/registro) | R2 |
+| B | Procesar línea por línea | Lee una línea, actualiza suma, cantidad y máxima de su sensor, y la descarta | La memoria deja de depender de n: solo se guardan 3 números por cada uno de los 200 sensores → pico casi constante y más de 90 % menor que A | R3 |
+| C | Guardar en formato compacto | Guarda solo las temperaturas, como números de 8 bytes en un `array('d')` por sensor, sin diccionarios ni textos | Sigue guardando las n lecturas (sirve si después se necesita, por ejemplo, la mediana), pero cada una ocupa ≈ 8 bytes en vez de ≈ 411 → la memoria crece con n, pero mucho menos que A | R3 |
 
 ## 6. Cómo reproducir
 ```bash
