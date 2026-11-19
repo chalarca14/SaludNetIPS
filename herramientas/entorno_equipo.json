@@ -1,0 +1,19 @@
+{
+  "sistema_operativo": "Windows 11 (10.0.26200)",
+  "arquitectura": "AMD64",
+  "procesador": "Intel64 Family 6 Model 186 Stepping 2, GenuineIntel",
+  "nucleos_logicos": 12,
+  "python": "3.14.3",
+  "nucleos_fisicos": 8,
+  "memoria_total_gib": 15.63,
+  "frecuencia_actual_mhz": 2200.0,
+  "frecuencia_min_mhz": null,
+  "frecuencia_max_mhz": 2200.0,
+  "sensores": {
+    "frecuencia": true,
+    "temperatura": false,
+    "energia_rapl": false,
+    "psutil": true
+  },
+  "temperatura_actual_c": null
+}
