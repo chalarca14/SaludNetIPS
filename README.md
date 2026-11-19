@@ -30,6 +30,25 @@ con varios n.
 
 > Es una sola corrida en un equipo distinto al servidor: sirve como punto de partida, no como resultado final.
 
+### Física del problema: magnitudes que intervienen
+
+| Magnitud | Símbolo | Unidad | Valor en nuestro caso | Por qué importa |
+|---|---|---|---|---|
+| Memoria (cantidad de información guardada) | M | byte (B); 1 MiB = 2²⁰ B = 1 048 576 B | pico de 117.5 MiB con n = 300 000; límite del servidor: 2 GiB = 2 147 483 648 B | Es la **magnitud principal**: si el pico supera lo que tiene el servidor, el tablero falla. |
+| Memoria por registro | m = M / n | B/registro | ≈ 411 B/registro | Dice cuánto "pesa" cada lectura guardada. Una temperatura sola cabe en 8 B, pero la línea base guarda un diccionario con 4 textos por cada lectura. |
+| Tiempo | t | segundo (s) | 1.69 – 1.88 s (inflado por tracemalloc) | Una estrategia que ahorra memoria pero se vuelve mucho más lenta no sirve para el tablero. |
+| Frecuencia del procesador | f | hertz (Hz = 1/s) | 2.2 GHz = 2.2 × 10⁹ Hz (reportada por psutil) | Indica cuántos ciclos hace el procesador por segundo. |
+| Periodo de reloj | T = 1/f | s | 1 / (2.2 × 10⁹ Hz) ≈ 0.455 ns | Es lo que dura un ciclo. |
+| Ciclos | N = f · t | ciclos (sin unidad) | ≈ 2.2 × 10⁹ Hz × 1.70 s ≈ 3.7 × 10⁹ ciclos → ≈ 12 000 ciclos por registro (estimación, inflada por tracemalloc) | Muestra que procesar cada lectura cuesta miles de ciclos: crear el diccionario y los textos es trabajo real del procesador. |
+| Energía | E = P · t | joule (J) | **no se mide** (RAPL no disponible en Windows) | Guardar y mover bytes gasta energía, pero no afirmamos ahorro de energía porque no lo podemos medir. |
+
+**Mecanismo (por qué falla):** la RAM guarda cada bit como una carga eléctrica en una celda física, y hay un
+número limitado de celdas (2 GiB en el servidor). La línea base crea un diccionario con 4 textos por cada
+línea del CSV y los guarda **todos a la vez**, así que la memoria ocupada crece con n (≈ 411 B por registro).
+Cuando el archivo es grande, el programa pide más bytes de los que el servidor tiene y el tablero falla.
+Si en vez de guardar todas las lecturas guardamos solo lo necesario (suma, cantidad y máxima por sensor),
+la memoria dejaría de depender de n (ver estrategias en §5).
+
 ## 3. Pregunta de investigación
 _¿Cómo cambia ________ (VD, unidad) cuando ________ (VI), manteniendo ________ (VC)?_
 
@@ -56,10 +75,10 @@ python ruta/a/analizar_resultados.py resultados/resultados.csv
 ## 7. Integrantes y roles
 | Rol | Integrante | Responsabilidad principal |
 |---|---|---|
-| R1 — Coordinación y protocolo experimental | _(nombre)_ | Mantiene el protocolo y la bitácora de decisiones; controla variables; modera issues y la planeación. |
-| R2 — Desarrollo de estrategia base | _(nombre)_ | Comprende y documenta la línea base; asegura la verificación de corrección (pruebas) de todas las estrategias. |
-| R3 — Estrategias alternativas y optimización | _(nombre)_ | Diseña e implementa las estrategias alternativas y justifica físicamente por qué deberían cambiar las magnitudes. |
-| R4 — Automatización de mediciones y análisis | _(nombre)_ | Automatiza experimentos y registro CSV; produce estadísticas y gráficos; documenta el entorno. |
+| R1 — Coordinación y protocolo experimental | Santiago (Integrante A) | Mantiene el protocolo y la bitácora de decisiones; controla variables; modera issues y la planeación. |
+| R2 — Desarrollo de estrategia base | Durman (Integrante B) | Comprende y documenta la línea base; asegura la verificación de corrección (pruebas) de todas las estrategias. |
+| R3 — Estrategias alternativas y optimización | Andres (Integrante C) | Diseña e implementa las estrategias alternativas y justifica físicamente por qué deberían cambiar las magnitudes. |
+| R4 — Automatización de mediciones y análisis | Santiago (entorno y ejecución) y Andres (análisis y gráficos) | Automatiza experimentos y registro CSV; produce estadísticas y gráficos; documenta el entorno. |
 
 Los roles son flexibles: **todos** participan en la comprensión física y en el código.
 
