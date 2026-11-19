@@ -3,7 +3,7 @@
 Cada decisión importante se registra aquí y se enlaza desde el issue o PR correspondiente.
 
 ## D-001 — Medir el tiempo y la memoria en corridas separadas
-- **Fecha:** 18/11/2026 · **Autor(es):** Santiago (R1) · **Issue/PR:** # _(número del issue de R1)_
+- **Fecha:** 18/11/2026 · **Autor(es):** Santiago (R1) · **Issue/PR:** #1
 - **Contexto:** el problema de SaludNet es de memoria, así que necesitamos el pico de memoria (MiB). Pero
   tracemalloc, la herramienta que mide la memoria, hace el programa más lento: la línea base dio 1.69 – 1.88 s
   con tracemalloc encendido.
@@ -18,7 +18,7 @@ Cada decisión importante se registra aquí y se enlaza desde el issue o PR corr
   tracemalloc solo ve la memoria que reserva Python, no toda la del proceso.
 
 ## D-002 — Dejar el plan de energía "Turbo" fijo
-- **Fecha:** 18/11/2026 · **Autor(es):** Santiago (R1) · **Issue/PR:** # _(número del issue de R1)_
+- **Fecha:** 18/11/2026 · **Autor(es):** Santiago (R1) · **Issue/PR:** #1
 - **Contexto:** el plan de energía cambia la frecuencia del procesador y, con ella, el tiempo. El PC tiene
   el plan "Turbo" (revisado con `powercfg /getactivescheme`).
 - **Opciones consideradas:** 1) cambiar a "Equilibrado"; 2) dejar "Turbo" en todas las sesiones.

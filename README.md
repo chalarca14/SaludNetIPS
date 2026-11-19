@@ -50,7 +50,10 @@ Si en vez de guardar todas las lecturas guardamos solo lo necesario (suma, canti
 la memoria dejaría de depender de n (ver estrategias en §5).
 
 ## 3. Pregunta de investigación
-_¿Cómo cambia ________ (VD, unidad) cuando ________ (VI), manteniendo ________ (VC)?_
+¿Cómo cambian el **pico de memoria (MiB)** y el **tiempo de ejecución (s)** cuando se cambia la
+**estrategia de procesamiento** (A = línea base, B = línea por línea, C = formato compacto) y el
+**número de registros n** (200 000, 500 000 y 1 000 000), manteniendo el mismo equipo, la versión de
+Python, los datos de entrada (semilla 4) y el plan de energía?
 
 ## 4. Hipótesis
 Ver [docs/hipotesis.md](docs/hipotesis.md).
