@@ -1,0 +1,10 @@
+marca_tiempo,equipo,estrategia,n,repeticion,tiempo_s,cpu_proceso_s,uso_cpu_pct,pico_mem_mib,rss_mib,frecuencia_mhz,temperatura_c,energia_j,potencia_w,medicion_memoria,observacion
+2026-11-25T09:17:38.254,Equipo 4,B_acumuladores,200000,2,0.385612,0.390625,101.3,,,,,,,no,
+2026-11-25T09:17:38.934,Equipo 4,A_linea_base,200000,2,0.653374,0.562500,86.1,,,,,,,no,
+2026-11-25T09:17:39.384,Equipo 4,B_acumuladores,200000,1,0.439857,0.406250,92.4,,,,,,,no,
+2026-11-25T09:17:42.814,Equipo 4,B_acumuladores,200000,0,3.418544,2.843750,83.2,0.205,,,,,,si,corrida de memoria
+2026-11-25T09:17:43.176,Equipo 4,C_array_d,200000,1,0.353849,0.343750,97.1,,,,,,,no,
+2026-11-25T09:17:46.265,Equipo 4,C_array_d,200000,0,3.080321,2.953125,95.9,1.761,,,,,,si,corrida de memoria
+2026-11-25T09:17:46.861,Equipo 4,A_linea_base,200000,1,0.587847,0.546875,93.0,,,,,,,no,
+2026-11-25T09:17:52.931,Equipo 4,A_linea_base,200000,0,6.059149,4.859375,80.2,78.183,,,,,,si,corrida de memoria
+2026-11-25T09:17:53.299,Equipo 4,C_array_d,200000,2,0.359133,0.359375,100.1,,,,,,,no,
