@@ -10,19 +10,19 @@ Uso (desde la raíz del repositorio):
     python -m experimentos.ejecutar_experimento --rapido      # prueba de humo
     python -m experimentos.ejecutar_experimento               # experimento formal
 """
+
 import argparse
 import random
+from src import linea_base
+from src import estrategia_b, estrategia_c
 from pathlib import Path
 
 from herramientas.labmedicion import Experimento, calentar
-from src import linea_base
-# TODO (R3): importar los módulos de las estrategias alternativas
-# from src import estrategia_b, estrategia_c
 
 ESTRATEGIAS = {
     "A_linea_base": linea_base,
-    # TODO (R3): "B_...": estrategia_b,
-    # TODO (R3): "C_...": estrategia_c,
+    "B_acumuladores": estrategia_b,
+    "C_array_d": estrategia_c,
 }
 
 # TODO (R1): justificar en docs/protocolo.md la elección de tamaños y repeticiones
@@ -38,15 +38,17 @@ def main() -> None:
     tamanos = TAMANOS[:1] if a.rapido else TAMANOS
     reps = 2 if a.rapido else REPETICIONES
 
-    datos = {n: linea_base.preparar(n) for n in tamanos}           # preparación: NO se mide
-    for n, d in datos.items():                                       # verificación de corrección
+    datos = {n: linea_base.preparar(n) for n in tamanos}  # preparación: NO se mide
+    for n, d in datos.items():  # verificación de corrección
         esperado = linea_base.ejecutar(d)
         for nombre, mod in ESTRATEGIAS.items():
-            assert mod.ejecutar(d) == esperado, f"{nombre} da un resultado distinto para n={n}"
+            assert (
+                mod.ejecutar(d) == esperado
+            ), f"{nombre} da un resultado distinto para n={n}"
             # TODO (R2): si el resultado es de coma flotante, comparar con tolerancia
 
     plan = [(e, n, r) for e in ESTRATEGIAS for n in tamanos for r in range(1, reps + 1)]
-    random.Random(42).shuffle(plan)                                  # orden aleatorio (control de deriva)
+    random.Random(42).shuffle(plan)  # orden aleatorio (control de deriva)
     for mod in ESTRATEGIAS.values():
         calentar(mod.ejecutar, datos[tamanos[0]], veces=1)
 
@@ -54,10 +56,19 @@ def main() -> None:
     salida.unlink(missing_ok=True)
     with Experimento(salida, equipo="Equipo 4") as exp:
         for i, (e, n, r) in enumerate(plan, 1):
-            exp.medir(ESTRATEGIAS[e].ejecutar, datos[n], estrategia=e, n=n, repeticion=r)
+            exp.medir(
+                ESTRATEGIAS[e].ejecutar, datos[n], estrategia=e, n=n, repeticion=r
+            )
             if r == 1:
-                exp.medir(ESTRATEGIAS[e].ejecutar, datos[n], estrategia=e, n=n, repeticion=0,
-                          medir_memoria=True, observacion="corrida de memoria")
+                exp.medir(
+                    ESTRATEGIAS[e].ejecutar,
+                    datos[n],
+                    estrategia=e,
+                    n=n,
+                    repeticion=0,
+                    medir_memoria=True,
+                    observacion="corrida de memoria",
+                )
             print(f"\r{i}/{len(plan)}", end="", flush=True)
     print(f"\nListo: {salida}")
 
