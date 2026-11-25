@@ -18,10 +18,6 @@ from src import estrategia_b, estrategia_c
 from pathlib import Path
 
 from herramientas.labmedicion import Experimento, calentar
-from src import linea_base
-
-# TODO (R3): importar los módulos de las estrategias alternativas
-from src import estrategia_b, estrategia_c
 
 ESTRATEGIAS = {
     "A_linea_base": linea_base,
