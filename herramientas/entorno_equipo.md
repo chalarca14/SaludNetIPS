@@ -1,0 +1,19 @@
+# Entorno experimental
+
+| Característica | Valor |
+|---|---|
+| sistema_operativo | Windows 11 (10.0.26200) |
+| arquitectura | AMD64 |
+| procesador | Intel64 Family 6 Model 186 Stepping 2, GenuineIntel |
+| nucleos_logicos | 12 |
+| python | 3.14.3 |
+| nucleos_fisicos | 8 |
+| memoria_total_gib | 15.63 |
+| frecuencia_actual_mhz | 2200.0 |
+| frecuencia_min_mhz | None |
+| frecuencia_max_mhz | 2200.0 |
+| sensores | {'frecuencia': True, 'temperatura': False, 'energia_rapl': False, 'psutil': True} |
+| temperatura_actual_c | None |
+
+> Generado con diagnostico_entorno.py. Los resultados de este equipo solo son
+> comparables con otros obtenidos en ESTE mismo entorno.
