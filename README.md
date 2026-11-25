@@ -15,6 +15,8 @@ El tablero que resume las lecturas de los sensores falla con archivos grandes po
 
 src/linea_base.py convierte cada línea en un diccionario y guarda todas en una lista.
 
+Comando: `python -m src.linea_base`
+
 | Medición preliminar (Clase 3)   | Valor | Unidad    |
 | ------------------------------- | ----- | --------- |
 | n utilizado                     |       | registros |
@@ -31,14 +33,11 @@ Ver [docs/hipotesis.md](docs/hipotesis.md).
 
 ## 5. Estrategias
 
-| Id  | Estrategia                               | Idea principal                                                                                                                | Efecto físico esperado                                                                                                                                                                            | Responsable |
-| --- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| A   | Línea base                               | (situación inicial)                                                                                                           | —                                                                                                                                                                                                 | R2          |
-| B   | Acumulación en línea (`estrategia_b.py`) | Leer el CSV línea por línea y guardar solo la suma, cantidad y temperatura máxima de cada sensor, sin almacenar las lecturas. | Reduce drásticamente el uso de RAM a un consumo casi constante (3 valores por sensor, sin crecer con `n`; 0.20 MiB preliminares con `n = 300 000`).                                               | R3          |
-| C   | Arreglo compacto (`estrategia_c.py`)     | Eliminar diccionarios por fila y guardar solo las temperaturas de cada sensor en un arreglo `array('d')`.                     | Disminuye el uso de RAM frente a la línea base al evitar diccionarios por fila y objetos/textos pesados de Python, usando arreglos numéricos compactos (2.54 MiB preliminares con `n = 300 000`). | R3          |
-
-- **Por qué B usa menos memoria:** lee cada fila del CSV y solo actualiza suma, conteo y máximo por sensor; como no guarda lecturas individuales ni diccionarios por fila, su memoria depende de los sensores (200) y no del total de registros `n`.
-- **Por qué C usa menos memoria que la línea base:** aunque conserva las lecturas de cada sensor, evita crear diccionarios por fila y usa `array('d')` (números flotantes de doble precisión contiguos en C) en lugar de estructuras y objetos más pesados de Python.[cite: 1, 2, 3]
+| Id  | Estrategia | Idea principal      | Efecto físico esperado | Responsable |
+| --- | ---------- | ------------------- | ---------------------- | ----------- |
+| A   | Línea base | (situación inicial) | —                      | R2          |
+| B   |            |                     |                        | R3          |
+| C   |            |                     |                        | R3          |
 
 ## 6. Cómo reproducir
 
