@@ -11,6 +11,7 @@ Uso (desde la raíz del repositorio):
     python -m experimentos.ejecutar_experimento               # experimento formal
 """
 import argparse
+from math import isclose
 import random
 from pathlib import Path
 
@@ -42,8 +43,18 @@ def main() -> None:
     for n, d in datos.items():                                       # verificación de corrección
         esperado = linea_base.ejecutar(d)
         for nombre, mod in ESTRATEGIAS.items():
-            assert mod.ejecutar(d) == esperado, f"{nombre} da un resultado distinto para n={n}"
-            # TODO (R2): si el resultado es de coma flotante, comparar con tolerancia
+            obtenido = mod.ejecutar(d)
+            assert obtenido.keys() == esperado.keys(), (
+                f"{nombre} devuelve sensores distintos para n={n}"
+            )
+            for sensor, (media_esperada, maxima_esperada) in esperado.items():
+                media, maxima = obtenido[sensor]
+                assert isclose(media, media_esperada, rel_tol=0.0, abs_tol=1e-9), (
+                    f"{nombre} devuelve una media distinta para {sensor}, n={n}"
+                )
+                assert isclose(maxima, maxima_esperada, rel_tol=0.0, abs_tol=1e-9), (
+                    f"{nombre} devuelve una máxima distinta para {sensor}, n={n}"
+                )
 
     plan = [(e, n, r) for e in ESTRATEGIAS for n in tamanos for r in range(1, reps + 1)]
     random.Random(42).shuffle(plan)                                  # orden aleatorio (control de deriva)
