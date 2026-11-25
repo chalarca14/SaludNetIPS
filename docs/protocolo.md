@@ -61,6 +61,8 @@ ver si algo raro pasó en el PC durante la medición (por ejemplo, un pico de CP
   **99 filas** en total.
 - **Duración estimada:** entre 5 y 15 minutos (estimación; la corrida de memoria de A con n = 1 000 000 es la
   más lenta). Por eso el monitoreo se programa para 900 s y se detiene a mano al terminar.
+  **Duración real (25/11/2026):** 62 s (de 11:39:44 a 11:40:46). La estimación se hizo con los tiempos de
+  la Clase 3, que tenían tracemalloc encendido y eran mucho más lentos.
 
 ## 5. Criterios de calidad de los datos
 - CV ≤ 10 % por combinación (CV = desviación / promedio × 100). Si se supera: revisar la sección 6 por
@@ -72,6 +74,9 @@ ver si algo raro pasó en el PC durante la medición (por ejemplo, un pico de CP
 |---|---|---|---|
 | 18/11/2026 22:34 | Medición preliminar de la línea base con Brave, VS Code y NVIDIA Overlay abiertos. El tiempo dio 1.69 – 1.70 s, contra 1.88 s de la primera medición. | Solo mediciones preliminares (Clase 3) | Para el experimento formal se cierran esos programas (sección 2, paso 2). El pico de memoria no cambió (117.5 MiB). |
 | 25/11/2026 | Prueba de 3 s de `monitor_sistema.py`: la RAM del sistema estaba al 88 % con varios programas abiertos. | Ninguna (fue solo una prueba del script) | Se agrega la revisión de RAM antes de medir (sección 2, paso 5). |
+| 25/11/2026 11:31 | Antes del experimento formal la RAM estaba en 54.5 % (máximo del protocolo: 50 %). | Todas las del experimento formal | Se mide igual: ver D-003 en `docs/decisiones.md`. |
+| 25/11/2026 | Las pruebas de Durman (B y C contra la línea base) todavía no están en `main`; solo corre `test_linea_base_ejecuta`. | Todas las del experimento formal | Se mide igual: la verificación de corrección de `ejecutar_experimento.py` compara B y C con la línea base para cada n antes de medir. Las pruebas se agregan cuando se una el PR de Durman. |
+| 25/11/2026 | La suspensión con cargador estaba en 5 min y el experimento dura más. | Todas | Se cambió a "Nunca" antes de medir y se devuelve a 5 min al terminar. |
 
 ## 7. Lista de chequeo para revisar el CSV (antes de abrir el PR)
 - [ ] El CSV tiene **99 filas** de datos (90 de tiempo + 9 de memoria).
