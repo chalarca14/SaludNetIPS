@@ -27,3 +27,16 @@ Cada decisión importante se registra aquí y se enlaza desde el issue o PR corr
   corridas (variable controlada). Si el plan cambia, la frecuencia f cambia, y el tiempo t = N / f también.
 - **Consecuencias / riesgos:** los tiempos solo son comparables con otros medidos en este mismo PC y con este
   mismo plan.
+
+## D-003 — Medir con 54.5 % de RAM ocupada (el protocolo pedía máximo 50 %)
+- **Fecha:** 25/11/2026 · **Autor(es):** Santiago (R1) · **Issue/PR:** #1
+- **Contexto:** después de cerrar el navegador y VS Code, la RAM del sistema quedó en 54.5 % (7.11 GiB libres).
+  El protocolo v2 pedía máximo 50 %.
+- **Opciones consideradas:** 1) seguir cerrando programas hasta bajar de 50 %; 2) medir así y dejarlo registrado.
+- **Decisión:** opción 2.
+- **Justificación (incluya evidencia o principio físico):** el 50 % es una regla práctica; lo importante es que no
+  falte RAM, porque si falta, Windows mueve datos al disco y los tiempos se alteran. La corrida que más memoria
+  pide (A con n = 1 000 000) necesita unos 392 MiB (estimación: 1 000 000 × 411 B), y había 7.11 GiB libres,
+  unas 18 veces más de lo necesario.
+- **Consecuencias / riesgos:** los programas en segundo plano (WhatsApp, Vínculo con el teléfono) pueden quitar
+  algo de CPU en alguna corrida. Se mitiga con 10 repeticiones, orden aleatorio y el registro de `monitor_sistema.py`.
