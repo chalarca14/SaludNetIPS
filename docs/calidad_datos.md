@@ -37,7 +37,13 @@ reportan, y **solo se excluyen si hay una causa documentada**.
 
 **Resultado:** **ninguna combinación pasa del 10 % de CV** (el mayor es 3.4 %, en A con n = 200 000).
 
-La regla de Tukey (fuera del rango Q1 − 1.5·IQR a Q3 + 1.5·IQR) marca 7 corridas de 90:
+La regla de Tukey (fuera del rango Q1 − 1.5·IQR a Q3 + 1.5·IQR) se aplicó de dos formas, porque los cuartiles
+se pueden calcular con dos métodos:
+- **Script del curso** `herramientas/analizar_resultados.py` (usa `estadistica.py`, método *exclusive*, el que trae
+  Python por defecto): marca **4 corridas** de 90 (A 200 000 rep. 9, B 200 000 rep. 1, A 500 000 rep. 4 y
+  B 1 000 000 rep. 7). Este es el resultado oficial.
+- **Revisión propia** con el método *inclusive* (rango un poco más estrecho): marca **7 corridas**, que incluyen las 4
+  anteriores. Se dejan todas en la tabla para mostrar que ni siquiera con el criterio más estricto cambia la decisión.
 
 | Combinación | Repetición | Tiempo (s) | Diferencia con la mediana | CPU del sistema en ese momento (monitor) | Media con ella → sin ella |
 |---|---|---|---|---|---|
@@ -52,7 +58,7 @@ La regla de Tukey (fuera del rango Q1 − 1.5·IQR a Q3 + 1.5·IQR) marca 7 corr
 **Decisión: no se excluye ninguna corrida.**
 1. No hay **causa documentada**: en esos momentos el monitor muestra el CPU del sistema normal (12 – 25 %; la
    mediana de todo el experimento fue 15.8 %) y no hay incidentes anotados en el protocolo.
-2. Son diferencias **pequeñas** (máximo 9.3 %). Tukey marca muchos puntos porque, con 10 datos tan parecidos entre sí,
+2. Son diferencias **pequeñas** (máximo 9.3 %). Tukey marca varios puntos porque, con 10 datos tan parecidos entre sí,
    el rango "normal" (IQR) es muy estrecho.
 3. Quitarlas cambiaría la media **menos de 1 %**, así que no cambian ninguna conclusión.
 
