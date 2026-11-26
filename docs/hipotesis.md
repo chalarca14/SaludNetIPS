@@ -28,6 +28,44 @@ cargador conectado, mismos datos (semilla 4, 200 sensores) y programas cerrados 
 **Lo que NO afirmamos:** no decimos nada sobre ahorro de **energía** (J), porque en este equipo no se
 puede medir (RAPL no disponible en Windows).
 
+## Evaluación de las hipótesis (Clase 5)
+
+**Responsable:** Andrés (R4) · **Fecha:** 25/11/2026 · **Script:** `python -m experimentos.analizar_resultados`
+(salida en `resultados/resumen_estadistico.csv`). Las hipótesis de arriba **no se modificaron** después de ver los datos.
+
+**Origen de los datos:** datos de entrada **SIMULADOS** (`src/generar_datos.py`, semilla 4); tiempos y picos de memoria
+**MEDIDOS** en el PC del Integrante A el 25/11/2026 (`resultados/resultados.csv`, 99 filas); ciclos N = f · t **ESTIMADOS**.
+
+**Alcance de las tres decisiones:** válidas **solo en este PC** (Windows 11, Python 3.14.3, plan "Turbo", 15.63 GiB),
+**con estos datos simulados** y para n entre 200 000 y 1 000 000. No se comprobaron en el servidor de 2 GiB de la empresa
+(el pico de memoria casi no depende del equipo; el tiempo sí).
+
+| Id | Estado | Criterio | Números | Alcance |
+|---|---|---|---|---|
+| H1 | **Se confirma** | Comparación directa de la corrida de memoria (k = 1): se confirma si M_B < 0.10 × M_A con n = 1 000 000. | M_A = 391.632 MiB, M_B = 0.205 MiB; 0.10 × M_A = 39.163 MiB. M_B / M_A = 0.000523 (**0.052 %**). | Este PC y estos datos; memoria medida con tracemalloc (solo memoria reservada por Python). |
+| H2 | **Se confirma** | Cociente M(1 000 000) / M(200 000): A y C dentro de 4 – 6; B dentro de 0.8 – 1.2. Las tres condiciones deben cumplirse. | A: 391.632 / 78.183 = **5.009** · C: 8.022 / 1.761 = **4.555** · B: 0.205 / 0.205 = **1.000**. Pendientes log-log de memoria: A = 1.001, C = 0.941, B = 0.000. | Este PC, estos datos y n entre 200 000 y 1 000 000 (tres puntos). |
+| H3 | **Se confirma** | (1) Prueba t de Welch A vs. B con p < 0.05 **y** (2) cociente en el peor caso, IC95 sup(t_B) / IC95 inf(t_A), ≤ 0.80. | t_A = 0.945836 s, IC95 [0.936658; 0.955014] · t_B = 0.425653 s, IC95 [0.419844; 0.431461] · t_B / t_A = **0.450**; peor caso = **0.461**. Welch: diferencia A − B = 0.520183 s, IC95 [0.509962; 0.530405] s, t = 108.34, gl = 15.21, p < 1e-15. Tamaño de efecto: d de Cohen = 48.45 (g de Hedges = 46.40). | Este PC (el tiempo depende del equipo), estos datos y n = 1 000 000. |
+
+**Por qué H1 y H2 se deciden con una sola corrida de memoria (k = 1).** En la Clase 3 el pico de memoria de la línea base
+salió **idéntico en 3 corridas** (117.5 MiB) y por eso D-001 fija 1 corrida de memoria por combinación. El pico depende de
+cuántos objetos se guardan, no del azar del sistema operativo. Con k = 1 no hay desviación estándar ni IC95 %, así que la
+decisión es una comparación directa. El margen es tan grande (el umbral de 39.163 MiB es unas 191 veces M_B, y los
+cocientes de H2 no están cerca de los bordes) que una variación pequeña no cambiaría la decisión.
+
+**Por qué este criterio para H3.** La hipótesis no dice solo "B es más rápida", sino "B tarda **como máximo el 80 %** de A".
+Por eso se usan dos condiciones:
+1. **Welch** responde si la diferencia entre A y B es real o puede ser azar. Se eligió Welch y no la prueba t clásica porque no
+   supone que A y B tengan la misma varianza (s_A = 0.0128 s y s_B = 0.0081 s). Con p < 1e-15 la diferencia no es azar.
+2. El **cociente en el peor caso** responde si se cumple el 80 %: se divide el límite **superior** del IC95 de B entre el límite
+   **inferior** del IC95 de A (lo más desfavorable para la hipótesis). Si aun así da ≤ 0.80, se cumple con margen. Dio 0.461.
+
+El tamaño de efecto (d = 48) indica que la diferencia entre medias es unas 48 veces la desviación típica de las corridas: las
+distribuciones de A y B no se tocan (máximo de B = 0.445 s, mínimo de A = 0.928 s en las 10 corridas).
+
+**Observación adicional (no era una hipótesis).** La pendiente log-log del tiempo de A es **1.10**, algo mayor que la de B (1.007)
+y C (1.003). A crece un poco más rápido que lineal; una posible causa (sin comprobar) es el trabajo extra de gestión de memoria
+al crear y guardar n diccionarios.
+
 ## Lista de verificación
 - [X] Tiene dirección (aumenta/disminuye) y una magnitud aproximada.
 - [X] La VD es medible con las herramientas disponibles en el laboratorio.

@@ -2,3 +2,5 @@
 # Dependencias opcionales (el laboratorio funciona sin ellas):
 psutil>=5.9      # CPU %, memoria residente, frecuencia, sensores
 matplotlib>=3.7  # gráficos de la Clase 5
+pandas>=2.0      # análisis estadístico de la Clase 5 (experimentos/analizar_resultados.py)
+numpy>=1.24      # ajuste log-log y cálculos de la Clase 5
