@@ -40,3 +40,18 @@ Cada decisión importante se registra aquí y se enlaza desde el issue o PR corr
   unas 18 veces más de lo necesario.
 - **Consecuencias / riesgos:** los programas en segundo plano (WhatsApp, Vínculo con el teléfono) pueden quitar
   algo de CPU en alguna corrida. Se mitiga con 10 repeticiones, orden aleatorio y el registro de `monitor_sistema.py`.
+
+## D-004 — Dejar como limitación conocida que B y C saltan las líneas dañadas (issue #17)
+- **Fecha:** 26/11/2026 · **Autor(es):** Santiago (R1) · **Issue/PR:** #17
+- **Contexto:** con un CSV de prueba de 3 líneas, una de ellas incompleta, A se detiene con error (`KeyError`), pero B y C
+  la saltan en silencio (`if len(fila) <= max(idx_sensor, idx_temp): continue`). En un tablero de vacunas, perder lecturas
+  sin enterarse es un riesgo.
+- **Opciones consideradas:** 1) cambiar B y C ahora para que cuenten las líneas saltadas y avisen; 2) no cambiar el código
+  medido y dejarlo documentado como limitación y trabajo futuro.
+- **Decisión:** opción 2.
+- **Justificación (incluya evidencia o principio físico):** el experimento formal ya se hizo con este código; si se cambia,
+  los resultados medidos dejarían de corresponder al código del repositorio y habría que repetir todo. Los datos simulados
+  no tienen líneas dañadas y la verificación de corrección (B y C iguales a A en los tres tamaños) pasó, así que el
+  problema no afecta los resultados.
+- **Consecuencias / riesgos:** antes de llevar B a producción hay que agregar el conteo de líneas saltadas y una alerta
+  (issue #17, abierto). Se dice en `docs/informe.md` §5.3 y §6 y en `docs/propuesta_mejora.md` §5.

@@ -91,6 +91,11 @@ Los roles son flexibles: **todos** participan en la comprensión física y en el
 ## 8. Documentación
 - [Variables](docs/variables.md) · [Protocolo](docs/protocolo.md) · [Entorno](docs/entorno.md)
 - [Decisiones técnicas](docs/decisiones.md) · [Uso de IA](docs/uso_ia.md) · [Informe](docs/informe.md)
+- [Hipótesis](docs/hipotesis.md) · [Calidad de datos](docs/calidad_datos.md) · [Análisis preliminar](docs/analisis_preliminar.md) · [Propuesta de mejora](docs/propuesta_mejora.md)
 
 ## 9. Resultados y conclusiones (Clase 5)
-_Resumen de máximo 5 líneas con cifras, unidades e intervalo de confianza._
+Con n = 1 000 000 registros (datos simulados, PC del Integrante A, 25/11/2026), la línea base **A** alcanzó un pico de **391.6 MiB** (≈ 411 B/registro) y la estrategia **B** solo **0.205 MiB**, igual con los tres tamaños de n; **C** usó 8.02 MiB.
+B tardó **0.426 s (IC95 % [0.420; 0.431])** frente a **0.946 s ([0.937; 0.955])** de A: un 55 % menos (Welch p < 1e-15, 10 corridas por combinación).
+Se confirman H1, H2 y H3. Con A, los 2 GiB del servidor alcanzan para ≈ 5.2 millones de registros (≈ 30 días de lecturas, estimado).
+**Recomendación:** cambiar el tablero a B (o a C si se necesitan todas las lecturas), repetir la medición en el servidor y avisar de las líneas dañadas (#17).
+Detalle en el [informe](docs/informe.md) y la [propuesta de mejora](docs/propuesta_mejora.md).
